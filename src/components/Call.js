@@ -8,6 +8,7 @@ import {
 import { firebaseSlugBase } from "../utils/firebase";
 import { getRoomUrl } from "../utils/room";
 import "./Call.css";
+import Todo from "./Todo";
 
 function Call({ firebaseApp }) {
   const callWrapperEl = useRef(null);
@@ -114,6 +115,7 @@ function Call({ firebaseApp }) {
             )}
           </div>
         )}
+        <Todo></Todo>
         <h3>Other Statuses</h3>
         {Object.entries(participants)
           .filter(([_, info]) => info.id !== localParticipant?.id)
