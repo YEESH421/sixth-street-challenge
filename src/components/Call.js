@@ -115,7 +115,6 @@ function Call({ firebaseApp }) {
             )}
           </div>
         )}
-        <Todo></Todo>
         <h3>Other Statuses</h3>
         {Object.entries(participants)
           .filter(([_, info]) => info.id !== localParticipant?.id)
@@ -134,6 +133,7 @@ function Call({ firebaseApp }) {
                   .map((v, i) => <p key={v + i}>{v}</p>)}
             </div>
           ))}
+          <Todo localParticipant={localParticipant} participants={participants}></Todo>
       </div>
     </div>
   );
