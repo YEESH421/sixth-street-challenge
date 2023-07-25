@@ -13,10 +13,13 @@ import Todo from "./Todo";
 function Call({ firebaseApp }) {
   const callWrapperEl = useRef(null);
   const [participants, setParticipants] = useState({});
+  const [roomId, setRoomId] = useState()
 
   const callFrame = useRef(null);
   useEffect(() => {
-    const roomUrl = getRoomUrl();
+    let roomUrl = getRoomUrl()
+    let temp = roomUrl.split('/')
+    setRoomId(temp[temp.length-1])
     const frame = DailyIframe.createFrame(callWrapperEl.current, {
       url: roomUrl,
     });
@@ -133,7 +136,7 @@ function Call({ firebaseApp }) {
                   .map((v, i) => <p key={v + i}>{v}</p>)}
             </div>
           ))}
-          <Todo localParticipant={localParticipant} participants={participants}></Todo>
+          <Todo localParticipant={localParticipant} participants={participants} roomId={roomId}></Todo>
       </div>
     </div>
   );

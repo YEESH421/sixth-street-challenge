@@ -3,7 +3,7 @@ import { firebaseSlugBase } from "../utils/firebase";
 import { child, onValue, set } from "@firebase/database";
 import './Todo.css'
 
-export default function Todo({ localParticipant }) {
+export default function Todo({ localParticipant, participants, roomId }) {
     const [todo, setTodo] = useState([])
     const [newTodo, setNewTodo] = useState(['', false])
     const [editing, setEditing] = useState([false, -1])
@@ -12,7 +12,7 @@ export default function Todo({ localParticipant }) {
     const addTodo = () => {
         const base = firebaseSlugBase();
         if (localParticipant) {
-            set(child(base, `todo`), [...todo, newTodo])
+            set(child(base, `todo/${roomId}`), [...todo, newTodo])
         }
         setNewTodo(['', false])
         setCount(count+1)
@@ -21,7 +21,7 @@ export default function Todo({ localParticipant }) {
         const base = firebaseSlugBase();
         if (localParticipant) {
             let res = todo.filter((val, indx) => indx !== i)
-            set(child(base, `todo`), res)
+            set(child(base, `todo/${roomId}`), res)
         }
         setCount(count-1)
     }
@@ -29,7 +29,7 @@ export default function Todo({ localParticipant }) {
     const editEntry = ()=> {
         const base = firebaseSlugBase();
         if (localParticipant) {
-            set(child(base, `todo`), todo)
+            set(child(base, `todo/${roomId}`), todo)
         }       
         setEditing([false, -1])
     }
@@ -37,7 +37,7 @@ export default function Todo({ localParticipant }) {
     const toggleCheck =(togIndx)=>{
         const base = firebaseSlugBase();
         if (localParticipant) {
-            set(child(base, `todo`), todo.map((val, indx) => {
+            set(child(base, `todo/${roomId}`), todo.map((val, indx) => {
                 let res = val
                 if(indx === togIndx){
                     res[1] = !res[1]
@@ -50,13 +50,13 @@ export default function Todo({ localParticipant }) {
     const clearAll = () => {
         const base = firebaseSlugBase();
         if (localParticipant) {
-            set(child(base, `todo`), [])
+            set(child(base, `todo/${roomId}`), [])
         }
         setCount(0)        
     }
     useEffect(() => {
         const base = firebaseSlugBase();
-        const todoRef = child(base, "todo");
+        const todoRef = child(base, `todo/${roomId}`);
         onValue(todoRef, (snapshot) => {
             let x = snapshot.val()
             let temp = []
